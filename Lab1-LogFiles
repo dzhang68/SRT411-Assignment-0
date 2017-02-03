@@ -1,0 +1,94 @@
+1. What are the qualities of a good log message?
+The qualities of a good log message should be descriptive, it should be relatable to other data, and it should be complete.
+
+
+2. Describe a descriptive message.
+A descriptive message is one that contains enough information for an analyst to identify
+all necessary accessible resources for the event described by the message.
+
+3. What is a good mental exercise for building a descriptive message?
+A good mental exercise for building a descriptive message is to fall back to the “five Ws
+and one H” approach from investigation and journalism: who, what, when, where, why,
+and how.
+
+
+4. What is a relatable log? What is a complete log message?
+A relatable message is one where the event is easily related to information from other
+sources.
+A complete log message is one that contains all the information about a particular event
+within that single log message.
+
+
+5. Why can relatability be a headache when dealing with servers?
+Relatability is a particular headache when dealing with service logs, as these types of logs often
+introduce additional addressing schemes on top of IP.
+
+
+6. How can you increase relatability in server logs?
+For host-based events, increasing relatability in server logs requires IP address and timing information including whether an event was remote or physically local, if the event was remote, the IP
+address and port of the remote event, and the IP address and port of the host.
+
+
+7. What is a complete log message?
+A complete log message is one that contains all the information about a particular event
+within that single log message.
+
+
+8. Describe the differences between complete log messages and incomplete log messages.
+Complete log message reduces the number of records an analyst has to search through and provides the analyst with a clear indicator that there is no further information to acquire from this process.
+With incomplete messages, you have to track state across multiple messages, each of which gives a snippet of information and which you’re going to have to group together to do any useful analysis.
+
+
+9. What five rules should we consider when converting log files to friendlier formats?
+Convert time to epoch time: Almost all record correlation involves identifying the same phenomenon from different sensors, meaning that you need to look for records that are close in time.Converting all time values to epoch time reduces parsing complexity, throws out the nightmare of time zones and daylight saving time, and ensures a consistent treatment for a consistent value.
+
+Make sure sensors are synchronized: A corrollary to the first note; make sure that when sensors report the same event, they are reporting the same time. Trying to correct for this after the fact is terribly difficult, so make sure that all the sensors are coordinated, that they all report the same time, and that the clocks are corrected and resynchronized regularly.
+
+Include addressing information: Wherever possible, include the flow five-tuple (source IP, destination IP, source port, destination port, protocol). If some of the values can be inferred from the record (e.g., HTTP servers are running TCP), they can be dropped.
+
+Ensure that delimiters are understood by the logger: On several occasions, I have encountered helpful administrators reconfiguring HTTP logs to use pipes rather than spaces as delimiters. A worthy sentiment, except when the logging module doesn’t know to escape the pipe when it occurs in text. If
+the logger can change its delimiter and understands that the change requires escaping the character, let the logger do it.
+
+Use error codes rather than text if possible: Text doesn’t scale well—it’s bulky, difficult to parse, and often repetitive. Logging systems that generate template messages can also include an error code of some kind as a compact representation of the message. Use this rather than text to save space.
+
+
+10. Name and describe the three major categories of log files.
+Columnar: Columnar logs record records in discrete columns that are distinguishable by delimiters
+or fixed text width.
+
+Templated: Templated logfiles look like English text, but the text comes from a set of document templates and is enumerable.
+
+Annotative: Annotative logfiles use multiple text records to describe a single event.
+
+
+11. What are the characteristics of columnar data?
+Columnar data, such as HTTP’s CLF format, records one message per event. This message is a summary of the entire event, and consists of a fixed set of fields in columnar format. Columnar logs are relatively easy to deal with as the fields are cleanly delineated and the format is rigid; every message has the same columns and the same information.
+
+
+12. What do we need to keep in mind when dealing with columnar data?
+Is the data delimited or fixed-width? If it’s fixed-width, are there fields that could conceivably exceed that width, and if so, are the results truncated or is the column expanded?
+
+If the data is delimited, is the delimiter escaped when used in the fields? Customizable formats (such as HTTP logs) may use a default delimiter and automatically escape it; if you decide to use your own delimiter, it probably won’t be automatically escaped.
+
+Is there a maximum record length? If there is a maximum record length, you may encounter truncated messages with missing fields.
+
+
+13. Name two good examples of columnar formats as described in the text.
+ELF and CLF logfiles are two good examples of columnar formats as described in the text.
+
+
+14. What do you need to keep in mind when dealing with templated text?
+When dealing with emplated text, keep in mind that whether we can get a complete list of the log messages:
+a. From whatever dovumentation we can find on the text format, identify an select the message most relevant to security. Any conversion script is goint to consist of a bunch of regular expressions, and the fewer expressions you have to maintain, the happier we'll be.
+b. For each message, identify the parameters it contains.
+c. Once we've identified parameters for each potential message, merge the parameters to create a superset. The goal of this stage is to create a schema representation of all the parameters that a message may potentially have; a particular message may not have all of them.
+d. Try to generat at least one event record for every templated message. Documentation can be inaccurate.
+
+
+15. In the sytstems we are looking at, which logs should we look at in terms of security?
+In the systems we are looking at, event logs, system logs, and antispam logs are the logs we should look at in terms of security.
+
+
+
+
+
